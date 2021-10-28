@@ -28,11 +28,23 @@ python -m nltk.downloader punkt
 
 ## Como executar
 ~~~
-cd app
-python main.py -f files/small.txt
+python main.py -f [PATH_FILE]
 ~~~
 
-## Exemplo:
+Temos dois arquivos de exemplo:
+~~~
+app/files/small.txt
+app/files/big.txt
+~~~
+
+Processar aqruivos:
+~~~
+cd app/
+python main.py -f files/small.txt
+python main.py -f files/big.txt
+~~~
+
+## Exemplo de processamento:
 
 Input small.txt:
 ~~~
