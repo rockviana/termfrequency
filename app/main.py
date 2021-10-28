@@ -4,7 +4,7 @@ from string import punctuation
 from nltk import word_tokenize, sent_tokenize
 from nltk.probability import FreqDist
 
-def openfile(path):
+def readFile(path):
     path_script = os.path.dirname(__file__)
     file_path = os.path.join(path_script, path)
     with open(file_path, 'r') as f:
@@ -21,10 +21,9 @@ def getAlphabetPosition(index, alphabet=string.ascii_lowercase, batch=None):
         return getAlphabetPosition(div - 1, alphabet, batch) + letter
     return letter
 
-def report(title,itens):
-    print(title)
-    for index,attr in enumerate(itens):
-        print('{}. {}: {}'.format(getAlphabetPosition(index), attr, itens[attr]) )
+def printReport(report):
+    for index,attr in enumerate(report):
+        print('{}. {}: {}'.format(getAlphabetPosition(index), attr, report[attr]) )
 
 def calcFrequencyTerms(text):
     words = word_tokenize(text)
@@ -33,23 +32,25 @@ def calcFrequencyTerms(text):
     return dict(frequency)
 
 if __name__ == "__main__":
-    file = 'files/small.txt'
-    article = openfile(file)
-    articleFrequency = calcFrequencyTerms(article)
-    report("Frequency by article", articleFrequency)
+    import sys
 
-    phrases = sent_tokenize(article)
+    try:
+        file = ' '.join(sys.argv[sys.argv.index('-f') + 1:]) or None
+    except Exception:
+        print('Arquivo de texto não informado')
 
-    for attr in articleFrequency:
-        articleFrequency[attr] = {'counter':articleFrequency[attr],
-                                  'counterPhrase':[0] * len(phrases)}
+    article = readFile(file)
+    phrases = sent_tokenize(article, language='english')
 
-    for index, phrase in enumerate(phrases):
-        phraseFrequency = calcFrequencyTerms(phrase)
-        for attr in phraseFrequency:
-            articleFrequency[attr]['counterPhrase'][index] = phraseFrequency[attr]
+    report = {}
+    for index, phrase in enumerate(phrases,1):
+        terms = calcFrequencyTerms(phrase)
+        for term in terms:
+            report[term] = report.get(term) or {'counter':0,'occurrences':[]}
+            report[term]['counter'] += terms[term]
+            report[term]['occurrences'].append(index)
 
-    for attr in articleFrequency:
-        articleFrequency[attr] = {articleFrequency[attr]['counter']:articleFrequency[attr]['counterPhrase']}
+    for term in report:
+        report[term] = {report[term]['counter']:report[term]['occurrences']}
 
-    report("Frequency by article + by phrase", articleFrequency)
+    printReport(report)
