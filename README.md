@@ -1,6 +1,23 @@
 ## Contar frequencia dos termos
 
-## Descrição do desafio
+## Configuracao
+Virtualenv
+~~~
+python -m venv env
+source ./env/bin/activate
+~~~
+
+Instalar nltk ([Help](https://www.nltk.org/install.html))
+~~~
+pip install nltk
+~~~
+
+Download dos arquivos nltk
+~~~
+python -m nltk.downloader punkt
+~~~
+
+# Descrição do desafio
 
 ### Concordância
 
